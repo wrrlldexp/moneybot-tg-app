@@ -1,0 +1,12 @@
+[project]
+name = "moneybot-tg-bot"
+version = "1.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "aiogram>=3.15,<4",
+    "aiohttp>=3.10",
+    "redis[hiredis]>=5.0",
+    "httpx>=0.28",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+]
