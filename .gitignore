@@ -9,3 +9,5 @@ dist/
 .ruff_cache/
 .pytest_cache/
 .claude/
+graphify-out/
+dev-bundle/

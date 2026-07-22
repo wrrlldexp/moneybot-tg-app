@@ -2,7 +2,7 @@
 
 from functools import lru_cache
 
-from pydantic import Field
+from cryptography.fernet import Fernet
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -21,10 +21,12 @@ class Settings(BaseSettings):
     JWT_SECRET: str
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TTL_MINUTES: int = 60
-    JWT_REFRESH_TTL_DAYS: int = 30
+    JWT_REFRESH_TTL_DAYS: int = 7
 
     TELEGRAM_BOT_TOKEN: str = ""
     TELEGRAM_WEBAPP_URL: str = "http://localhost:5174"
+
+    ENCRYPTION_KEY: str = Fernet.generate_key().decode()
 
     CORS_ORIGINS: str = "http://localhost:5174"
 

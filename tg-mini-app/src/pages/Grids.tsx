@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getServerGrids, startServerGrid, stopServerGrid, type Grid } from "@/api/endpoints";
+import { getServerGrids, startServerGrid, stopServerGrid } from "@/api/endpoints";
 import { useServerStore } from "@/stores/serverStore";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ export function Grids() {
   const navigate = useNavigate();
   const { haptic } = useTelegram();
 
-  const { data: grids, isLoading } = useQuery({
+  const { data: grids, isLoading, error, refetch } = useQuery({
     queryKey: ["grids", serverId],
     queryFn: () => getServerGrids(serverId!),
     enabled: !!serverId,
@@ -29,14 +29,27 @@ export function Grids() {
     onSuccess: () => { haptic?.notificationOccurred("warning"); queryClient.invalidateQueries({ queryKey: ["grids", serverId] }); },
   });
 
-  if (!serverId) return <p className="text-center py-16 text-tg-hint">Select a server</p>;
-  if (isLoading) return <div className="flex items-center justify-center h-64"><div className="w-6 h-6 border-2 border-tg-button border-t-transparent rounded-full animate-spin" /></div>;
+  if (!serverId) return <p className="text-center py-16 text-tg-hint">Выберите сервер</p>;
+  if (isLoading) return (
+    <div className="space-y-4">
+      <div className="h-7 w-24 rounded-lg bg-tg-secondary animate-pulse" />
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="h-20 rounded-xl bg-tg-secondary animate-pulse" />
+      ))}
+    </div>
+  );
+  if (error) return (
+    <div className="text-center py-16 space-y-4">
+      <p className="text-sm text-tg-hint">Не удалось загрузить сетки</p>
+      <button onClick={() => refetch()} className="px-5 py-2 rounded-xl bg-tg-button text-tg-button-text text-sm font-medium">Повторить</button>
+    </div>
+  );
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-bold">Grids</h1>
+      <h1 className="text-xl font-bold">Сетки</h1>
       {!grids?.length ? (
-        <p className="text-center py-12 text-tg-hint">No grids</p>
+        <p className="text-center py-12 text-tg-hint">Нет сеток</p>
       ) : (
         <div className="space-y-2">
           {grids.map((g) => (
@@ -56,7 +69,7 @@ export function Grids() {
                 </div>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-tg-hint">{g.mode} · {g.levels_above + g.levels_below} levels</span>
+                <span className="text-tg-hint">{g.mode} · {g.levels_above + g.levels_below} уровней</span>
                 <span className={`font-semibold tabular-nums ${Number(g.realized_pnl) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                   {Number(g.realized_pnl) >= 0 ? "+" : ""}{Number(g.realized_pnl).toFixed(4)}
                 </span>

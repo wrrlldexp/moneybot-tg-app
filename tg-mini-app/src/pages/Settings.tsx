@@ -8,7 +8,7 @@ export function SettingsPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-bold">Settings</h1>
+      <h1 className="text-xl font-bold">Настройки</h1>
 
       <div className="rounded-xl bg-tg-secondary p-4 border border-white/5 space-y-3">
         <div className="flex items-center gap-3">
@@ -21,9 +21,9 @@ export function SettingsPage() {
       </div>
 
       <div className="rounded-xl bg-tg-secondary p-4 border border-white/5">
-        <div className="flex items-center gap-2 mb-3"><Bell size={16} className="text-tg-accent" /><span className="font-medium text-sm">Notifications</span></div>
+        <div className="flex items-center gap-2 mb-3"><Bell size={16} className="text-tg-accent" /><span className="font-medium text-sm">Уведомления</span></div>
         <div className="space-y-3">
-          {["Trade notifications", "Error alerts", "Grid status changes", "Daily summary"].map((label, i) => (
+          {["Уведомления о сделках", "Оповещения об ошибках", "Смена статуса сетки", "Ежедневная сводка"].map((label, i) => (
             <label key={label} className="flex items-center justify-between cursor-pointer">
               <span className="text-sm">{label}</span>
               <input type="checkbox" defaultChecked={i < 3}
@@ -34,11 +34,11 @@ export function SettingsPage() {
       </div>
 
       <div className="rounded-xl bg-tg-secondary p-4 border border-white/5">
-        <div className="flex items-center gap-2 mb-3"><Shield size={16} className="text-tg-accent" /><span className="font-medium text-sm">App</span></div>
+        <div className="flex items-center gap-2 mb-3"><Shield size={16} className="text-tg-accent" /><span className="font-medium text-sm">Приложение</span></div>
         <div className="grid grid-cols-2 gap-y-2 text-sm">
-          <span className="text-tg-hint">Platform</span><span className="text-right font-medium">{platform}</span>
-          <span className="text-tg-hint">Theme</span><span className="text-right font-medium">{colorScheme}</span>
-          <span className="text-tg-hint">Version</span><span className="text-right font-medium">1.0.0</span>
+          <span className="text-tg-hint">Платформа</span><span className="text-right font-medium">{platform}</span>
+          <span className="text-tg-hint">Тема</span><span className="text-right font-medium">{colorScheme}</span>
+          <span className="text-tg-hint">Версия</span><span className="text-right font-medium">2.0.0</span>
         </div>
       </div>
     </div>

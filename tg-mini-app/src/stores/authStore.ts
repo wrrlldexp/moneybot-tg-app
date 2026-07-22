@@ -18,11 +18,35 @@ interface AuthState {
   logout: () => void;
 }
 
+const STORAGE_KEY = "moneybot_access_token";
+
+function loadPersistedToken(): string | null {
+  try {
+    return sessionStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
 export const useAuthStore = create<AuthState>((set) => ({
-  accessToken: null,
+  accessToken: loadPersistedToken(),
   refreshToken: null,
   user: null,
-  isAuthenticated: false,
-  setAuth: (accessToken, refreshToken, user) => set({ accessToken, refreshToken, user, isAuthenticated: true }),
-  logout: () => set({ accessToken: null, refreshToken: null, user: null, isAuthenticated: false }),
+  isAuthenticated: !!loadPersistedToken(),
+  setAuth: (accessToken, refreshToken, user) => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, accessToken);
+    } catch {
+      // sessionStorage may be unavailable in some contexts
+    }
+    set({ accessToken, refreshToken, user, isAuthenticated: true });
+  },
+  logout: () => {
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+    set({ accessToken: null, refreshToken: null, user: null, isAuthenticated: false });
+  },
 }));
